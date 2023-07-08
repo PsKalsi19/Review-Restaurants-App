@@ -1,23 +1,22 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RestaurantsContext } from "../context/RestaurantsProvider";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import RatingCard from "../components/RatingCard";
+import RestaurantsActions from "../context/ALL_ACTIONS";
 
 const RestaurantDetail = () => {
-  const location = useLocation();
-  const { name, address, phone, ratings, averageRating, description, menu } =
-    location?.state;
-  const menuItemsName = menu.map(({ name }) => name).join(", ");
-  // const {
-  //     restaurantsState: {
-  //       cuisines,
-  //       selectedCuisine,
-  //       restaurantsDataOnCuisineBasis,
-  //     },
-  //     handleCuisineSelect,
-  //   } = useContext(RestaurantsContext);
+  const {
+    dispatchRestaurants,
+    restaurantsState: { selectedRestaurant, restaurants },
+  } = useContext(RestaurantsContext);
+
+  const [restaurant, setRestaurant] = useState(null);
+  useEffect(() => {
+    setRestaurant(restaurants.find((ele) => ele.id === selectedRestaurant.id));
+  }, [restaurants, selectedRestaurant.id]);
+  const menuItemsName = restaurant?.menu.map(({ name }) => name).join(", ");
 
   return (
     <section className="my-4 px-16">
@@ -31,19 +30,31 @@ const RestaurantDetail = () => {
           <div className="flex text-left flex-col">
             <h1 className="text-7xl text-gray-900 font-bold mb-4">{name}</h1>
             <p className="text-gray-500 text-lg">{menuItemsName}</p>
-            <p className="text-gray-500 text-lg">{address}</p>
+            <p className="text-gray-500 text-lg">{restaurant.address}</p>
             <p className="text-gray-500 text-lg">
-              Average Rating: {averageRating}
+              Average Rating: {restaurant.averageRating}
             </p>
           </div>
-          <button className="focus:outline-none  h-min text-white bg-red-400 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ">
+          <button
+            onClick={() =>
+              dispatchRestaurants({
+                type: RestaurantsActions.TOGGLE_MODAL,
+                payload: true,
+              })
+            }
+            className="focus:outline-none  h-min text-white bg-red-400 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 "
+          >
             Add Review
           </button>
         </div>
-        <h3 className="font-bold text-gray-900 text-left mt-12 mb-8 text-4xl">Reviews </h3>
-        {
-            ratings && ratings.length>0 && ratings.map((rating,index)=><RatingCard key={index} ratingDetails={rating}/>)
-        }
+        <h3 className="font-bold text-gray-900 text-left mt-12 mb-8 text-4xl">
+          Reviews{" "}
+        </h3>
+        {restaurant.ratings &&
+          restaurant.ratings.length > 0 &&
+          restaurant.ratings.map((rating, index) => (
+            <RatingCard key={index} ratingDetails={rating} />
+          ))}
       </div>
     </section>
   );
