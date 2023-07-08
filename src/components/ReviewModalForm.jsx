@@ -21,7 +21,19 @@ const ReviewModalForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatchRestaurants({type:RestaurantsActions.UPDATE_REVIEW,payload:{form}})
+    dispatchRestaurants({
+      type: RestaurantsActions.UPDATE_REVIEW,
+      payload: { form },
+    });
+
+    dispatchRestaurants({
+      type: RestaurantsActions.TOGGLE_MODAL,
+      payload: false,
+    });
+    setForm({
+      comment: "",
+      rating: null,
+    });
   };
 
   return (
@@ -116,12 +128,12 @@ const ReviewModalForm = () => {
                   </div>
 
                   <div className="flex justify-center">
-                      <button
-                        type="submit"
-                        className="rounded-md border w-auto px-8 py-2 bg-gray-50 text-gray-900 font-bold"
-                      >
-                        Submit
-                      </button>
+                    <button
+                      type="submit"
+                      className="rounded-md border w-auto px-8 py-2 bg-gray-50 text-gray-900 font-bold"
+                    >
+                      Submit
+                    </button>
                   </div>
                 </form>
               </Dialog.Panel>

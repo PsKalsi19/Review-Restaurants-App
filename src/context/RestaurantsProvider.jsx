@@ -14,7 +14,7 @@ const initialState = {
 };
 
 const defaultUser = {
-  name: "Prabhjot",
+  revName: "Prabhjot",
   pp: "https://ik.imagekit.io/pb97gg2as/Ping-Connnect/Avatars/_020d6743-7a2d-4329-8cf2-19e4fd779812.jpg?updatedAt=1686940612243",
 };
 
@@ -55,7 +55,7 @@ const updateReview = ({ form }, selectedRestaurant, allRestaurants) => {
 
   return allRestaurants.map((ele) =>
     ele.id === updatedSelectedRestaurant.id
-      ? { updatedSelectedRestaurant }
+      ?  updatedSelectedRestaurant 
       : ele
   );
 };

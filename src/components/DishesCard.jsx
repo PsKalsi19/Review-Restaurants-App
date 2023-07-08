@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { RestaurantsContext } from "../context/RestaurantsProvider";
 
 const DishesCard = ({menuDetails,restaurantsDetails}) => {
